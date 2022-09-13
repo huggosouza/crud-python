@@ -13,7 +13,6 @@ class Crud():
         database = 'crud_python',
     )
     
-    
     cursor = connection.cursor()
     
     if connection.is_closed() == True:
@@ -22,8 +21,6 @@ class Crud():
         print("The connection is sucessfully established :)!")
         
 
-
-    
     def mountDB():
             # Tries to use the database, if it doesn't exists, it'll create it.
             try:
@@ -63,4 +60,3 @@ class Crud():
                 
     
 Crud.mountDB()
-
