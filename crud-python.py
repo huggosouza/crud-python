@@ -1,3 +1,6 @@
+# Author: Hugo Souza
+# Date: 09/13/2022
+
 from errno import errorcode
 import mysql.connector
 
