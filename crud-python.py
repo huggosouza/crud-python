@@ -1,7 +1,6 @@
 # Author: Hugo Souza
 # Date: 09/13/2022
 
-from errno import errorcode
 import mysql.connector
 
 # Connecting to database and checking if necessary table already exists, if not, it'll create it
@@ -46,7 +45,7 @@ class Crud():
                         last_name varchar(15) NOT NULL,
                         age int,
                         PRIMARY KEY (user_ID)
-                    )
+                    );
                     """
                 )
                 
@@ -57,6 +56,20 @@ class Crud():
                 else:
                     print(err)
                     
-                
-    
-Crud.mountDB()
+    def fetchUsers():
+        try:
+            Crud.cursor.execute("SELECT * FROM employees;")
+            fetch = Crud.cursor.fetchall()
+            for i in fetch:
+                print(i)
+        except mysql.connector.Error as err:
+            print(err)
+            
+    def addUser(fname, lname, agee):
+        try:
+            query = f"""INSERT INTO employees(first_name, last_name, age) VALUES ('{fname}', '{lname}', {agee});
+                    """
+            Crud.cursor.execute(query)
+            Crud.connection.commit()
+        except mysql.connector.Error as err:
+            print(err)
