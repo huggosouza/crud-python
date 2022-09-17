@@ -1,4 +1,3 @@
-from errno import errorcode
 import mysql.connector
 
 # Connecting to database and checking if necessary table already exists, if not, it'll create it
@@ -18,13 +17,11 @@ class Crud():
     else:
         print("The connection is sucessfully established :)!")
         
-
-
     
     def mountDB():
             # Tries to use the database, if it doesn't exists, it'll create it.
             try:
-                Crud.cursor.execute("USE crud_python")
+                Crud.cursor.execute("USE crud_python;")
             # Raises the exception and tries to created the db
             except mysql.connector.Error as err:
                 print(err)
@@ -37,7 +34,7 @@ class Crud():
                 except mysql.connector.Error as err:
                     print(err)
                     
-            # Now with the db already created, it tries to create the table and its rows.
+            # Now with the db already created, it tries to create the table and its columns.
             try:
                 Crud.cursor.execute(
                     """CREATE TABLE employees (
@@ -45,7 +42,7 @@ class Crud():
                         first_name varchar(15) NOT NULL,
                         last_name varchar(15) NOT NULL,
                         age int,
-                        PRIMARY KEY (user_ID)
+                        PRIMARY KEY (user_ID);
                     )
                     """
                 )
@@ -57,7 +54,26 @@ class Crud():
                 else:
                     print(err)
                     
+    def fetchUsers():
+        try:
+            Crud.cursor.execute("SELECT * FROM employees;")
+            usersFetchedData = Crud.cursor.fetchall()
+            for i in usersFetchedData:
+                print(i)
+            
+        except mysql.connector.Error as err:
+            print(err)
+            
+    def addNewUser():
+        try:
+            Crud.cursor.execute("INSERT INTO employees (first_name, last_name, age) VALUES ('first', 'first', 7);")
+            
+            
+        except mysql.connector.Error as err:
+            print(err)      
                 
     
 Crud.mountDB()
-
+Crud.fetchUsers()
+Crud.addNewUser()
+Crud.fetchUsers()
