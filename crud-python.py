@@ -75,6 +75,14 @@ class Crud():
             Crud.connection.commit()
         except mysql.connector.Error as err:
             print(err)
+    def removeUser(userID):
+        try:
+            cmd = f"""DELETE FROM employees WHERE user_ID = {userID};
+                    """
+            Crud.cursor.execute(cmd)
+            Crud.connection.commit()
+        except mysql.connector.Error as err:
+            print(err)
 
 def menu():
     print("""------------- MENU -------------            
@@ -85,15 +93,26 @@ def menu():
              5 - Look for an employee by name
              6 - Look for an employee by ID""")
     choice = int(input(": "))
+    # Show all employees
     if choice == 1:
         Crud.fetchUsers()
         menu()
+    # Add new employee
     elif choice == 2:
         Crud.addUser(fname = input("First name: ", lname = input("Last name: "), age = input("Age: ")))
         menu()
+    # Remove an employee
     elif choice == 3:
+        Crud.removeUser(input("Type the user ID: "))
         menu()
+    # Edit an existing employee
     elif choice == 4:
+        menu()
+    # Look for an employee by name
+    elif choice == 5:
+        menu()
+    # Look by ID
+    elif choice == 6:
         menu()
     else:
         print("This entry doesn't exists!")
