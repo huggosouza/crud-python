@@ -59,7 +59,6 @@ class Crud():
                     
     def fetchUsers():
         try:
-            listUsers = []
             Crud.cursor.execute("SELECT * FROM employees;")
             fetch = Crud.cursor.fetchall()
             for i in fetch:
@@ -75,6 +74,7 @@ class Crud():
             Crud.connection.commit()
         except mysql.connector.Error as err:
             print(err)
+            
     def removeUser(userID):
         try:
             cmd = f"""DELETE FROM employees WHERE user_ID = {userID};
@@ -83,15 +83,45 @@ class Crud():
             Crud.connection.commit()
         except mysql.connector.Error as err:
             print(err)
+            
+    def editUser(userID, field):
+        try:
+            cmd = f"""UPDATE employees SET {field} = '{input("New value: ")}' WHERE user_ID = {userID};
+                    """
+            Crud.cursor.execute(cmd)
+            Crud.connection.commit()
+        except mysql.connector.Error as err:
+            print(err)
+            
+    def lookByName(userName):
+        try:
+            Crud.cursor.execute(f"""SELECT * FROM employees WHERE first_name = '{userName}';""")
+            fetch = Crud.cursor.fetchall()
+            for i in fetch:
+                print(f"ID: {i[0]}\nFirst name: {i[1]}\nLast name: {i[2]}\nAge: {i[3]}\n---------")
+        except mysql.connector.Error as err:
+            print(err)
+    
+    def lookByID(userID):
+        try:
+            Crud.cursor.execute(f"""SELECT * FROM employees WHERE user_ID = '{userID}';""")
+            fetch = Crud.cursor.fetchall()
+            for i in fetch:
+                print(f"ID: {i[0]}\nFirst name: {i[1]}\nLast name: {i[2]}\nAge: {i[3]}\n---------")
+        except mysql.connector.Error as err:
+            print(err)
+        
 
 def menu():
-    print("""------------- MENU -------------            
+    print("""
+          ------------- MENU -------------            
              1 - Show all employees
              2 - Add new employee
              3 - Remove an employee
              4 - Edit an existing employee 
              5 - Look for an employee by name
-             6 - Look for an employee by ID""")
+             6 - Look for an employee by ID
+             """)
     choice = int(input(": "))
     # Show all employees
     if choice == 1:
@@ -99,7 +129,7 @@ def menu():
         menu()
     # Add new employee
     elif choice == 2:
-        Crud.addUser(fname = input("First name: ", lname = input("Last name: "), age = input("Age: ")))
+        Crud.addUser(fname = input("First name: "), lname = input("Last name: "), agee = input("Age: "))
         menu()
     # Remove an employee
     elif choice == 3:
@@ -107,12 +137,15 @@ def menu():
         menu()
     # Edit an existing employee
     elif choice == 4:
+        Crud.editUser(input("User ID to be edited: "), input("first_name, last_name or age? "))
         menu()
     # Look for an employee by name
     elif choice == 5:
+        Crud.lookByName(input("Name: "))
         menu()
     # Look by ID
     elif choice == 6:
+        Crud.lookByID(input("ID: "))
         menu()
     else:
         print("This entry doesn't exists!")
