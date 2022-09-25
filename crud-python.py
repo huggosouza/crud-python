@@ -1,3 +1,4 @@
+# † J.M.J
 # Author: Hugo Souza
 # Date: 09/13/2022
 
@@ -58,10 +59,11 @@ class Crud():
                     
     def fetchUsers():
         try:
+            listUsers = []
             Crud.cursor.execute("SELECT * FROM employees;")
             fetch = Crud.cursor.fetchall()
             for i in fetch:
-                print(i)
+                print(f"ID: {i[0]}\nFirst name: {i[1]}\nLast name: {i[2]}\nAge: {i[3]}\n---------")
         except mysql.connector.Error as err:
             print(err)
             
@@ -73,3 +75,28 @@ class Crud():
             Crud.connection.commit()
         except mysql.connector.Error as err:
             print(err)
+
+def menu():
+    print("""------------- MENU -------------            
+             1 - Show all employees
+             2 - Add new employee
+             3 - Remove an employee
+             4 - Edit an existing employee 
+             5 - Look for an employee by name
+             6 - Look for an employee by ID""")
+    choice = int(input(": "))
+    if choice == 1:
+        Crud.fetchUsers()
+        menu()
+    elif choice == 2:
+        Crud.addUser(fname = input("First name: ", lname = input("Last name: "), age = input("Age: ")))
+        menu()
+    elif choice == 3:
+        menu()
+    elif choice == 4:
+        menu()
+    else:
+        print("This entry doesn't exists!")
+        menu()
+        
+menu()
