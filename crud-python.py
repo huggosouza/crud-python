@@ -9,8 +9,7 @@ class Crud():
     connection = mysql.connector.connect(
         host = '127.0.0.1',
         user = 'root',
-        password = '',
-        database = 'crud_python',
+        password = ''
     )
     
     cursor = connection.cursor()
@@ -24,7 +23,7 @@ class Crud():
     def mountDB():
             # Tries to use the database, if it doesn't exists, it'll create it.
             try:
-                Crud.cursor.execute("USE crud_python")
+                Crud.cursor.execute("USE crud_python;")
             # Raises the exception and tries to created the db
             except mysql.connector.Error as err:
                 print(err)
@@ -121,6 +120,7 @@ def menu():
              4 - Edit an existing employee 
              5 - Look for an employee by name
              6 - Look for an employee by ID
+             7 - Mount DB
              """)
     choice = int(input(": "))
     # Show all employees
@@ -146,6 +146,9 @@ def menu():
     # Look by ID
     elif choice == 6:
         Crud.lookByID(input("ID: "))
+        menu()
+    elif choice == 7:
+        Crud.mountDB()
         menu()
     else:
         print("This entry doesn't exists!")
